@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>André Afonso — Eng. Software | IA & Sistemas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #080a0f;
+    --bg2: #0d1018;
+    --bg3: #12151e;
+    --cyan: #00e5c0;
+    --red: #ff5c5c;
+    --yellow: #ffe066;
+    --white: #f0f2f5;
+    --muted: #4a5068;
+    --border: rgba(255,255,255,0.06);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-body);
+    cursor: none;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── CURSOR ── */
+  #cursor-dot {
+    position: fixed; top: 0; left: 0; z-index: 9999;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cyan);
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+    transition: transform .1s;
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; z-index: 9998;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1.5px solid rgba(0,229,192,.5);
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+    transition: width .35s cubic-bezier(.17,.67,.35,1.3),
+                height .35s cubic-bezier(.17,.67,.35,1.3),
+                border-color .3s, left .12s ease-out, top .12s ease-out;
+  }
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: var(--cyan); }
+
+  /* ── NOISE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none; opacity: .6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 5vw;
+    height: 64px; display: flex; align-items: center; justify-content: space-between;
+    transition: background .4s, backdrop-filter .4s, border-color .4s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: rgba(8,10,15,.8);
+    backdrop-filter: blur(20px);
+    border-color: var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-mono); font-size: .85rem; font-weight: 700;
+    color: var(--white); text-decoration: none; letter-spacing: .05em;
+  }
+  .nav-logo span { color: var(--cyan); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-mono); font-size: .75rem; font-weight: 500;
+    color: var(--muted); text-decoration: none; letter-spacing: .1em; text-transform: uppercase;
+    transition: color .25s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative; height: 100vh; min-height: 640px;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 5vw; overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-grid::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, var(--bg) 100%);
+  }
+
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(80px); z-index: 0;
+    animation: drift 12s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(0,229,192,.07); top: -15%; right: -10%; animation-duration: 14s; }
+  .orb-2 { width: 350px; height: 350px; background: rgba(255,92,92,.06); bottom: -10%; left: 5%; animation-duration: 11s; animation-delay: -4s; }
+  .orb-3 { width: 260px; height: 260px; background: rgba(255,224,102,.05); top: 30%; left: 35%; animation-duration: 16s; animation-delay: -7s; }
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-20px) scale(1.05); }
+    66% { transform: translate(-20px,25px) scale(.95); }
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+  .hero-label {
+    font-family: var(--font-mono); font-size: .7rem; font-weight: 500;
+    color: var(--cyan); letter-spacing: .2em; text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .7s .2s forwards;
+  }
+  .hero-name {
+    font-family: var(--font-display); font-size: clamp(5rem, 14vw, 14rem);
+    line-height: .9; letter-spacing: .02em;
+    color: var(--white);
+    opacity: 0; transform: translateY(40px);
+    animation: fadeUp .8s .4s forwards;
+  }
+  .hero-name em { color: var(--cyan); font-style: normal; }
+  .hero-sub {
+    font-family: var(--font-body); font-size: clamp(.9rem, 1.5vw, 1.15rem);
+    font-weight: 300; color: rgba(240,242,245,.5);
+    margin-top: 1.4rem; max-width: 460px; line-height: 1.6;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .7s .65s forwards;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .7s .85s forwards;
+  }
+  .btn {
+    font-family: var(--font-mono); font-size: .78rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase; text-decoration: none;
+    padding: .85rem 2rem; border-radius: 3px;
+    display: inline-flex; align-items: center; gap: .6rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: var(--cyan); color: #080a0f;
+    box-shadow: 0 0 32px rgba(0,229,192,.2);
+  }
+  .btn-primary:hover { box-shadow: 0 0 48px rgba(0,229,192,.4); }
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,.15);
+  }
+  .btn-ghost:hover { border-color: var(--white); }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 5vw;
+    font-family: var(--font-mono); font-size: .65rem; color: var(--muted);
+    letter-spacing: .15em; text-transform: uppercase;
+    display: flex; align-items: center; gap: .8rem;
+    opacity: 0; animation: fadeUp .6s 1.2s forwards;
+  }
+  .scroll-hint::before {
+    content: '';
+    display: block; width: 1px; height: 40px;
+    background: linear-gradient(var(--cyan), transparent);
+    animation: lineGrow 1.4s 1.4s ease-out forwards;
+    transform-origin: top; transform: scaleY(0);
+  }
+  @keyframes lineGrow { to { transform: scaleY(1); } }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: 8rem 5vw; position: relative; }
+
+  .section-label {
+    font-family: var(--font-mono); font-size: .65rem; font-weight: 700;
+    color: var(--muted); letter-spacing: .2em; text-transform: uppercase;
+    margin-bottom: .6rem;
+    display: flex; align-items: center; gap: .8rem;
+  }
+  .section-label span { color: var(--cyan); }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    line-height: 1; letter-spacing: .02em;
+    margin-bottom: 1rem;
+  }
+
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s, transform .7s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── APPROACH ── */
+  #approach { border-top: 1px solid var(--border); }
+  .approach-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: start;
+  }
+  .approach-text p {
+    font-size: 1.05rem; line-height: 1.8; color: rgba(240,242,245,.65);
+    margin-bottom: 1.5rem;
+  }
+  .approach-text p strong { color: var(--white); font-weight: 500; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .stat-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1.8rem 1.5rem;
+    position: relative; overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .stat-card:hover { border-color: rgba(0,229,192,.25); transform: translateY(-3px); }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stat-card.cyan::before { background: var(--cyan); }
+  .stat-card.red::before { background: var(--red); }
+  .stat-card.yellow::before { background: var(--yellow); }
+  .stat-card.white::before { background: var(--white); }
+  .stat-number { font-family: var(--font-display); font-size: 2.8rem; line-height: 1; letter-spacing: .02em; }
+  .stat-card.cyan .stat-number { color: var(--cyan); }
+  .stat-card.red .stat-number { color: var(--red); }
+  .stat-card.yellow .stat-number { color: var(--yellow); }
+  .stat-card.white .stat-number { color: var(--white); }
+  .stat-label {
+    font-family: var(--font-mono); font-size: .68rem;
+    color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .5rem;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { border-top: 1px solid var(--border); background: var(--bg2); }
+  .projects-list { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 4rem; }
+  .project-card {
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg3); overflow: hidden; transition: border-color .3s;
+  }
+  .project-card:hover { border-color: rgba(0,229,192,.2); }
+  .project-header {
+    padding: 2rem 2.4rem; display: flex; align-items: center;
+    justify-content: space-between; cursor: pointer;
+  }
+  .project-meta { flex: 1; }
+  .project-num { font-family: var(--font-mono); font-size: .65rem; color: var(--cyan); letter-spacing: .2em; margin-bottom: .4rem; }
+  .project-title { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); letter-spacing: .03em; line-height: 1; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+  .tag {
+    font-family: var(--font-mono); font-size: .62rem; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase;
+    padding: .25rem .7rem; border-radius: 3px; border: 1px solid;
+  }
+  .tag-cyan { color: var(--cyan); border-color: rgba(0,229,192,.3); background: rgba(0,229,192,.06); }
+  .tag-red { color: var(--red); border-color: rgba(255,92,92,.3); background: rgba(255,92,92,.06); }
+  .tag-yellow { color: var(--yellow); border-color: rgba(255,224,102,.3); background: rgba(255,224,102,.06); }
+  .tag-white { color: rgba(240,242,245,.6); border-color: rgba(255,255,255,.12); background: transparent; }
+  .toggle-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--white); font-size: 1.4rem; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .25s, border-color .25s, transform .3s; flex-shrink: 0;
+  }
+  .project-card.open .toggle-btn { background: var(--cyan); color: #080a0f; border-color: var(--cyan); transform: rotate(45deg); }
+  .project-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height .6s cubic-bezier(.4,0,.2,1), padding .4s;
+    padding: 0 2.4rem;
+  }
+  .project-card.open .project-body { max-height: 1200px; padding-bottom: 2.4rem; }
+  .project-body-inner {
+    border-top: 1px solid var(--border); padding-top: 2rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  }
+  .detail-block { margin-bottom: 1.8rem; }
+  .detail-block-title {
+    font-family: var(--font-mono); font-size: .65rem; color: var(--muted);
+    letter-spacing: .15em; text-transform: uppercase; margin-bottom: .8rem;
+  }
+  .detail-block p { font-size: .92rem; line-height: 1.7; color: rgba(240,242,245,.6); }
+  .metrics-row { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .metric-chip {
+    font-family: var(--font-mono); font-size: .72rem; font-weight: 700;
+    padding: .4rem .9rem; border-radius: 4px;
+    background: rgba(0,229,192,.1); color: var(--cyan); border: 1px solid rgba(0,229,192,.2);
+  }
+  .arch-flow { display: flex; flex-direction: column; gap: .4rem; }
+  .arch-step { font-family: var(--font-mono); font-size: .75rem; color: rgba(240,242,245,.55); display: flex; align-items: center; gap: .6rem; }
+  .arch-step .arrow { color: var(--cyan); }
+  .arch-step:first-child .arrow { display: none; }
+  .flow-steps { display: flex; flex-direction: column; gap: .8rem; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: .9rem 1.1rem; border-radius: 5px;
+    background: rgba(255,255,255,.03); border: 1px solid var(--border); transition: border-color .2s;
+  }
+  .flow-step:hover { border-color: rgba(0,229,192,.2); }
+  .flow-step-num { font-family: var(--font-mono); font-size: .65rem; font-weight: 700; color: var(--cyan); min-width: 24px; padding-top: .05rem; }
+  .flow-step-text { font-size: .85rem; color: rgba(240,242,245,.6); line-height: 1.5; }
+  .flow-step-text strong { color: var(--white); display: block; font-size: .8rem; margin-bottom: .15rem; }
+  .tol-table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+  .tol-table th {
+    font-family: var(--font-mono); font-size: .6rem; font-weight: 700;
+    color: var(--muted); letter-spacing: .1em; text-transform: uppercase;
+    text-align: left; padding: .5rem .8rem; border-bottom: 1px solid var(--border);
+  }
+  .tol-table td { font-family: var(--font-mono); font-size: .73rem; padding: .55rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .status-normal { color: var(--cyan); }
+  .status-alert { color: var(--yellow); }
+  .status-critical { color: var(--red); }
+
+  /* ── SKILLS ── */
+  #skills { border-top: 1px solid var(--border); }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 4rem; }
+  .skill-cat {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.8rem; transition: border-color .3s, transform .3s;
+  }
+  .skill-cat:hover { border-color: rgba(0,229,192,.2); transform: translateY(-3px); }
+  .skill-cat-label {
+    font-family: var(--font-mono); font-size: .62rem; font-weight: 700;
+    letter-spacing: .18em; text-transform: uppercase; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .skill-cat-label::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; }
+  .cat-backend .skill-cat-label { color: var(--cyan); }
+  .cat-backend .skill-cat-label::before { background: var(--cyan); }
+  .cat-frontend .skill-cat-label { color: var(--yellow); }
+  .cat-frontend .skill-cat-label::before { background: var(--yellow); }
+  .cat-db .skill-cat-label { color: var(--red); }
+  .cat-db .skill-cat-label::before { background: var(--red); }
+  .cat-ai .skill-cat-label { color: rgba(240,242,245,.7); }
+  .cat-ai .skill-cat-label::before { background: rgba(240,242,245,.7); }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skill-pill {
+    font-family: var(--font-mono); font-size: .72rem;
+    padding: .35rem .9rem; border-radius: 3px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border);
+    color: rgba(240,242,245,.75); transition: background .2s, color .2s, border-color .2s;
+  }
+  .skill-pill:hover { background: rgba(0,229,192,.1); color: var(--cyan); border-color: rgba(0,229,192,.25); }
+
+  /* ── FOOTER ── */
+  footer { border-top: 1px solid var(--border); padding: 6rem 5vw 4rem; position: relative; overflow: hidden; }
+  .footer-name {
+    font-family: var(--font-display); font-size: clamp(4rem, 12vw, 11rem);
+    line-height: .85; letter-spacing: .02em; color: rgba(255,255,255,.06);
+    user-select: none; pointer-events: none; margin-bottom: 4rem;
+  }
+  .footer-bottom { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+  .footer-email {
+    font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2.5rem);
+    color: var(--white); text-decoration: none; letter-spacing: .04em; transition: color .25s;
+  }
+  .footer-email:hover { color: var(--cyan); }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    font-family: var(--font-mono); font-size: .72rem;
+    color: var(--muted); text-decoration: none; letter-spacing: .12em; text-transform: uppercase; transition: color .25s;
+  }
+  .footer-links a:hover { color: var(--cyan); }
+  .footer-copy { font-family: var(--font-mono); font-size: .62rem; color: var(--muted); letter-spacing: .08em; text-align: right; width: 100%; margin-top: 3rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .approach-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .project-body-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .project-header { padding: 1.4rem 1.4rem; }
+    .project-body { padding: 0 1.4rem; }
+    .project-card.open .project-body { padding-bottom: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">AA<span>_</span>DEV</a>
+  <ul class="nav-links">
+    <li><a href="#approach">// Abordagem</a></li>
+    <li><a href="#projects">// Projetos</a></li>
+    <li><a href="#skills">// Skills</a></li>
+    <li><a href="#contact">// Contato</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-content">
+    <p class="hero-label"><span>01 —</span> Portfólio Técnico · 2025</p>
+    <h1 class="hero-name">ANDRÉ<br><em>AFONSO</em></h1>
+    <p class="hero-sub">Engenheiro de Software especializado em IA, sistemas de back-end robustos e interfaces que fazem sentido.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Ver Projetos
+      </a>
+      <a href="https://github.com/andredx12" target="_blank" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll para explorar</div>
+</section>
+
+<section id="approach">
+  <div class="reveal">
+    <div class="section-label"><span>02 —</span> Abordagem</div>
+    <h2 class="section-title">COMO<br>EU PENSO</h2>
+  </div>
+  <div class="approach-inner" style="margin-top: 3.5rem;">
+    <div class="approach-text reveal">
+      <p>Construo sistemas que <strong>funcionam sob pressão</strong>. Cada projeto começa com a pergunta certa: qual é o problema real por trás do requisito?</p>
+      <p>Combino rigor técnico com visão de produto — seja treinando modelos de ML para classificação de conteúdo em tempo real ou estruturando um ERP industrial com regras de negócio complexas.</p>
+      <p>Meu foco está em <strong>arquiteturas limpas, métricas concretas</strong> e código que outras pessoas conseguem manter.</p>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-card cyan"><div class="stat-number">94.7%</div><div class="stat-label">Acurácia ML</div></div>
+      <div class="stat-card red"><div class="stat-number">&lt;200ms</div><div class="stat-label">Resp. API</div></div>
+      <div class="stat-card yellow"><div class="stat-number">2+</div><div class="stat-label">Projetos Prod.</div></div>
+      <div class="stat-card white"><div class="stat-number">4+</div><div class="stat-label">Stack Domínios</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label"><span>03 —</span> Projetos</div>
+    <h2 class="section-title">WORK<br>SELECIONADO</h2>
+  </div>
+  <div class="projects-list">
+
+    <div class="project-card reveal" data-project="1">
+      <div class="project-header" onclick="toggleProject(1)">
+        <div class="project-meta">
+          <div class="project-num">// PROJETO 01</div>
+          <h3 class="project-title">CONTROLE PARENTAL COM IA</h3>
+          <div class="project-tags">
+            <span class="tag tag-cyan">Machine Learning</span>
+            <span class="tag tag-cyan">SVM + TF-IDF</span>
+            <span class="tag tag-white">Python</span>
+            <span class="tag tag-white">Flask</span>
+            <span class="tag tag-white">Firebase</span>
+          </div>
+        </div>
+        <button class="toggle-btn" id="btn-1">+</button>
+      </div>
+      <div class="project-body" id="body-1">
+        <div class="project-body-inner">
+          <div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Contexto</div>
+              <p>Sistema de controle parental orientado por ML que intercepta e classifica conteúdo web em tempo real, notificando responsáveis via app mobile conectado ao Firebase.</p>
+            </div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Métricas</div>
+              <div class="metrics-row">
+                <span class="metric-chip">Acurácia 94.7%</span>
+                <span class="metric-chip">Recall 95.8%</span>
+                <span class="metric-chip">&lt;200ms resposta</span>
+              </div>
+            </div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Arquitetura</div>
+              <div class="arch-flow">
+                <div class="arch-step"><span class="arrow">→</span> App Filho (cliente)</div>
+                <div class="arch-step"><span class="arrow">→</span> Servidor Flask (API)</div>
+                <div class="arch-step"><span class="arrow">→</span> SVM Engine (classificador)</div>
+                <div class="arch-step"><span class="arrow">→</span> Firebase (sync real-time)</div>
+                <div class="arch-step"><span class="arrow">→</span> App Pais (dashboard)</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-block-title">// Fluxo de Processamento</div>
+            <div class="flow-steps">
+              <div class="flow-step"><span class="flow-step-num">01</span><div class="flow-step-text"><strong>Interceptação</strong>Requisição de conteúdo capturada no dispositivo filho via proxy local.</div></div>
+              <div class="flow-step"><span class="flow-step-num">02</span><div class="flow-step-text"><strong>Vetorização TF-IDF</strong>Texto extraído e convertido em vetor numérico com TF-IDF para análise semântica.</div></div>
+              <div class="flow-step"><span class="flow-step-num">03</span><div class="flow-step-text"><strong>Classificação SVM</strong>Modelo SVM retorna label (seguro / impróprio) com score de confiança.</div></div>
+              <div class="flow-step"><span class="flow-step-num">04</span><div class="flow-step-text"><strong>Ação & Notificação</strong>Conteúdo bloqueado ou liberado. Push notification enviado ao responsável via Firebase.</div></div>
+              <div class="flow-step"><span class="flow-step-num">05</span><div class="flow-step-text"><strong>Dashboard Parental</strong>Histórico completo, configurações de filtro e relatórios acessíveis em tempo real.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" data-project="2">
+      <div class="project-header" onclick="toggleProject(2)">
+        <div class="project-meta">
+          <div class="project-num">// PROJETO 02</div>
+          <h3 class="project-title">BLINTEC — MINI ERP TÊXTIL</h3>
+          <div class="project-tags">
+            <span class="tag tag-red">ERP Industrial</span>
+            <span class="tag tag-white">C# .NET</span>
+            <span class="tag tag-white">React</span>
+            <span class="tag tag-white">PostgreSQL</span>
+            <span class="tag tag-yellow">Tailwind CSS</span>
+            <span class="tag tag-white">REST API</span>
+            <span class="tag tag-white">Swagger</span>
+          </div>
+        </div>
+        <button class="toggle-btn" id="btn-2">+</button>
+      </div>
+      <div class="project-body" id="body-2">
+        <div class="project-body-inner">
+          <div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Contexto</div>
+              <p>ERP têxtil industrial com foco em controle de produção, FIFO de rolos de tecido, comparativo de consumo planejado vs. real e sistema de auditoria por tolerância.</p>
+            </div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Stack Técnica</div>
+              <div class="arch-flow">
+                <div class="arch-step"><span class="arrow">→</span> Back-end: C# (.NET)</div>
+                <div class="arch-step"><span class="arrow">→</span> Front-end: React + Tailwind CSS</div>
+                <div class="arch-step"><span class="arrow">→</span> Banco de dados: PostgreSQL</div>
+                <div class="arch-step"><span class="arrow">→</span> REST API documentada com Swagger</div>
+              </div>
+            </div>
+            <div class="detail-block">
+              <div class="detail-block-title">// Tabela de Tolerância de Consumo</div>
+              <table class="tol-table">
+                <tr><th>Desvio</th><th>Status</th><th>Ação</th></tr>
+                <tr><td>≤ 10%</td><td class="status-normal">NORMAL</td><td style="color:rgba(240,242,245,.5); font-size:.65rem;">Registro automático</td></tr>
+                <tr><td>10 – 20%</td><td class="status-alert">ATENÇÃO</td><td style="color:rgba(240,242,245,.5); font-size:.65rem;">Alerta ao supervisor</td></tr>
+                <tr><td>&gt; 20%</td><td class="status-critical">CRÍTICO</td><td style="color:rgba(240,242,245,.5); font-size:.65rem;">Bloqueio + auditoria</td></tr>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div class="detail-block-title">// Fluxo de Produção</div>
+            <div class="flow-steps">
+              <div class="flow-step"><span class="flow-step-num">01</span><div class="flow-step-text"><strong>Pedido de Produção</strong>Cliente ou planejamento gera pedido com especificações de tecido e quantidade.</div></div>
+              <div class="flow-step"><span class="flow-step-num">02</span><div class="flow-step-text"><strong>Ordem de Produção (OP)</strong>Sistema cria OP vinculada ao pedido com consumo planejado calculado.</div></div>
+              <div class="flow-step"><span class="flow-step-num">03</span><div class="flow-step-text"><strong>Seleção de Rolo FIFO</strong>Sistema seleciona automaticamente rolos na ordem de entrada (FIFO) para garantir rastreabilidade.</div></div>
+              <div class="flow-step"><span class="flow-step-num">04</span><div class="flow-step-text"><strong>Execução & Enfesto</strong>Operador registra início do processo; sistema monitora consumo em tempo real.</div></div>
+              <div class="flow-step"><span class="flow-step-num">05</span><div class="flow-step-text"><strong>Registro de Consumo Real</strong>Metragem real informada e comparada com o planejado. Desvio calculado automaticamente.</div></div>
+              <div class="flow-step"><span class="flow-step-num">06</span><div class="flow-step-text"><strong>Alertas & Auditoria</strong>Conforme a tabela de tolerância, sistema aciona alertas ou bloqueia operação para auditoria.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label"><span>04 —</span> Tecnologias</div>
+    <h2 class="section-title">STACK &<br>FERRAMENTAS</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cat cat-backend reveal">
+      <div class="skill-cat-label">Back-end</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Java</span><span class="skill-pill">C# (.NET)</span><span class="skill-pill">Python</span><span class="skill-pill">Flask</span><span class="skill-pill">Swagger</span><span class="skill-pill">REST API</span>
+      </div>
+    </div>
+    <div class="skill-cat cat-frontend reveal">
+      <div class="skill-cat-label">Front-end & Mobile</div>
+      <div class="skill-pills">
+        <span class="skill-pill">React</span><span class="skill-pill">React Native</span><span class="skill-pill">Tailwind CSS</span><span class="skill-pill">HTML / CSS</span><span class="skill-pill">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-cat cat-db reveal">
+      <div class="skill-cat-label">Banco & Cloud</div>
+      <div class="skill-pills">
+        <span class="skill-pill">PostgreSQL</span><span class="skill-pill">SQL Server</span><span class="skill-pill">Firebase</span><span class="skill-pill">Cloud Deploy</span>
+      </div>
+    </div>
+    <div class="skill-cat cat-ai reveal">
+      <div class="skill-cat-label">IA & DevOps</div>
+      <div class="skill-pills">
+        <span class="skill-pill">Scikit-learn</span><span class="skill-pill">TF-IDF / NLP</span><span class="skill-pill">SVM</span><span class="skill-pill">Docker</span><span class="skill-pill">Git</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-name">ANDRÉ<br>AFONSO</div>
+  <div class="footer-bottom">
+    <div>
+      <div class="section-label" style="margin-bottom:.8rem;"><span>05 —</span> Contato</div>
+      <a href="mailto:andre_quintino30@hotmail.com" class="footer-email">ANDRE_QUINTINO30@HOTMAIL.COM</a>
+    </div>
+    <div>
+      <div class="footer-links">
+        <a href="https://github.com/andredx12" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/andre-quintino-dev/" target="_blank">LinkedIn</a>
+        <a href="mailto:andre_quintino30@hotmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer-copy">© 2025 André Afonso — Eng. Software | IA & Sistemas</p>
+</footer>
+
+<script>
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    rx += (mx - rx) * .12; ry += (my - ry) * .12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (i % 4) * 0.1 + 's';
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  function toggleProject(id) {
+    const card = document.querySelector(`[data-project="${id}"]`);
+    const btn = document.getElementById(`btn-${id}`);
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.project-card').forEach(c => c.classList.remove('open'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '+');
+    if (!isOpen) { card.classList.add('open'); btn.textContent = '×'; }
+  }
+</script>
+</body>
+</html>
