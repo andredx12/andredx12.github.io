@@ -39,6 +39,7 @@ Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`, que
   - `scenes/`: Sobre, colete e uma cena por projeto.
 - Estilos: as cores e fontes ficam só no `@theme` de `src/index.css`. `src/styles/base.css` tem as peças comuns, e cada seção com 3D tem seu CSS do lado do componente (`sobre.css`, `experiencia.css`, `projetos.css`). `npm run format` formata os CSS.
 - `public/models/tenis.glb` e `public/img/`: modelo do tênis e foto recortada.
+- `index.html`: título, descrição, imagem de compartilhamento (`public/og-image.jpg`, 1200 × 630) e dados estruturados. Se mudar o nome ou o cargo, atualiza aqui também.
 - `docs/plano-tecnico.md`: pesos, níveis de qualidade e como testar o desempenho (`#dev` no endereço).
 
 Fontes Inter e Space Grotesk sob a SIL Open Font License (licenças em `public/fonts`).

@@ -1,6 +1,6 @@
 import { useSyncExternalStore, type CSSProperties } from "react";
 import { ChipList } from "../../components/ChipList";
-import { blintec as experience } from "../../data/experience";
+import { blintec as experience, CAREER_ANCHOR } from "../../data/experience";
 import { projectAnchor } from "../../data/projects";
 import { useRevealOnce } from "../../hooks/useRevealOnce";
 
@@ -27,7 +27,7 @@ export function Career() {
   const { highlight } = experience;
 
   return (
-    <div className={visible ? "career in" : "career"} ref={ref}>
+    <div className={visible ? "career in" : "career"} id={CAREER_ANCHOR} ref={ref}>
       <div className="wrap career-grid">
         <div className="career-intro">
           <h2 id="exp-titulo" className="rv">

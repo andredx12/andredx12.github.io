@@ -1,5 +1,8 @@
 /* Trajetória profissional, mostrada depois da animação do colete */
 
+/** Âncora da trajetória: o link "Pular animação" leva pra cá. */
+export const CAREER_ANCHOR = "trajetoria";
+
 export interface Role {
   title: string;
   when: string;

@@ -90,13 +90,9 @@
   .no-webgl .proj-gl {
     display: none;
   }
-  .gl-msg {
+  /* sem JavaScript ou WebGL as cenas de projeto não têm o que mostrar: fica só o texto */
+  :root:not(.js) .proj-stage,
+  .no-webgl .proj-stage {
     display: none;
-  }
-  .no-webgl .gl-msg {
-    display: block;
-    padding: 14px;
-    color: var(--color-muted);
-    font-size: 14px;
   }
 }

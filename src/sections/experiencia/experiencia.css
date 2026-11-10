@@ -4,12 +4,26 @@
   .company,
   .rail h4,
   .learn h4,
-  .caption h3 {
+  .caption-title {
     font-family: var(--font-display);
     text-wrap: balance;
   }
+  /* A sequência alta só existe com JavaScript e WebGL. Sem eles, entra a versão em texto. */
   .seq {
     position: relative;
+  }
+  .seq-sticky,
+  .seq-over {
+    display: none;
+  }
+  :root.js:not(.no-webgl) .seq-sticky,
+  :root.js:not(.no-webgl) .seq-over {
+    display: block;
+  }
+  :root.js:not(.no-webgl) .seq-static {
+    display: none;
+  }
+  :root.js:not(.no-webgl) .seq {
     height: 560vh;
     --sh: calc(100vh - var(--header-h) - env(safe-area-inset-top, 0px));
   }
@@ -19,7 +33,7 @@
     }
   }
   @media (max-width: 767px) {
-    .seq {
+    :root.js:not(.no-webgl) .seq {
       height: 460vh;
     }
   }
@@ -107,11 +121,23 @@
     color: var(--color-ink);
   }
   @media (max-width: 767px) {
+    .steps {
+      gap: 4px;
+    }
     .steps button span {
       display: none;
     }
     .steps button {
-      padding: 5px;
+      padding: 4px;
+    }
+    /* no celular o link fica curto pra caber na linha dos botões; o leitor de tela ouve o texto todo */
+    .seq-skip-long {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
   .seq-bottom {
@@ -121,12 +147,12 @@
   .caption {
     max-width: 26rem;
   }
-  .caption h3 {
+  .caption-title {
     font-size: clamp(1.6rem, 3.2vw, 2.3rem);
     font-weight: 600;
     letter-spacing: -0.02em;
   }
-  .caption p {
+  .caption-text {
     margin-top: 6px;
     color: var(--color-muted);
     font-size: 16px;
@@ -264,11 +290,10 @@
     border-radius: 2px;
     background: linear-gradient(var(--color-line), var(--color-electric));
     transform-origin: top;
-    transform: scaleY(0);
     transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
   }
-  .career.in .rail::before {
-    transform: scaleY(1);
+  :root.js .career:not(.in) .rail::before {
+    transform: scaleY(0);
   }
   .rail > li {
     position: relative;
@@ -332,7 +357,8 @@
     font-weight: 500;
     text-underline-offset: 3px;
   }
-  .rv {
+  /* sem JavaScript o conteúdo aparece direto, sem revelação */
+  :root.js .rv {
     opacity: 0;
     transform: translateY(14px);
     transition:
@@ -345,7 +371,7 @@
     transform: none;
   }
   @media (prefers-reduced-motion: reduce) {
-    .rv {
+    :root.js .rv {
       transform: none;
       transition: opacity 0.4s;
       transition-delay: 0s;
@@ -353,5 +379,54 @@
     .rail::before {
       transition: none;
     }
+  }
+  .seq-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .seq-skip {
+    pointer-events: auto;
+    flex: none;
+    font-size: 13px;
+    color: var(--color-ink);
+    background: rgba(11, 16, 32, 0.72);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .seq-skip:hover {
+    border-color: rgba(107, 149, 255, 0.7);
+  }
+  .seq-static {
+    padding-block: 72px 8px;
+  }
+  .seq-static-body {
+    max-width: 52rem;
+  }
+  .seq-static-intro {
+    font-size: 18px;
+    color: var(--color-ink);
+  }
+  .seq-static ol {
+    margin-top: 18px;
+    padding-left: 1.4em;
+    display: grid;
+    gap: 10px;
+    color: var(--color-muted);
+    list-style: decimal;
+  }
+  .seq-static strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .seq-static-note {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--color-muted);
   }
 }
