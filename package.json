@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir .ssr && node scripts/prerender.mjs",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings src",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.css\""
+    "format": "prettier --write \"src/**/*.css\"",
+    "format:check": "prettier --check \"src/**/*.css\""
   },
   "dependencies": {
     "react": "^19.2.8",

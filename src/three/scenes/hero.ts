@@ -25,6 +25,7 @@ import {
 } from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { onIdle } from "../../lib/idle";
 import { getEngine } from "../engine/engine";
 import { coarsePointer, motion } from "../engine/motion";
 import type { Disposable } from "../engine/types";
@@ -257,7 +258,14 @@ export function createHeroScene({ stage, viewport, onReady }: HeroOptions): Hero
   const book = makeBook();
   const dumbbell = makeDumbbell();
   root.add(shoe, book, dumbbell.group);
-  loadShoe(shoe);
+  /* o tênis (470 KB) baixa na primeira revelação ou quando o navegador fica livre, o que vier antes */
+  let shoeRequested = false;
+  const requestShoe = () => {
+    if (shoeRequested) return;
+    shoeRequested = true;
+    loadShoe(shoe);
+  };
+  const cancelIdleShoe = onIdle(requestShoe, 4000);
 
   const items: FloatingItem[] = [
     { object: shoe, delay: 0, show: [-0.34, -0.42, 0.36], hide: [-0.12, -0.25, -0.3], rot: [0.35, 0.5, -0.12], spin: 1, depth: 1, fa: 0.011, fw: 1.3, fp: 0, rw: 0.37 },
@@ -342,12 +350,14 @@ export function createHeroScene({ stage, viewport, onReady }: HeroOptions): Hero
   return {
     setRevealed(on) {
       revealed = on;
+      if (on) requestShoe();
     },
     setPointer(x, y) {
       targetX = x;
       targetY = y;
     },
     dispose() {
+      cancelIdleShoe();
       remove();
       disposeObject(scene);
     },

@@ -11,6 +11,13 @@ Abrir a página com `#dev` no fim do endereço (ex.: `http://localhost:5173/#dev
 - O laço de desenho para por completo quando nenhuma cena está na tela (0 quadros) e volta quando uma cena entra.
 - Lê `prefers-reduced-motion` e reage se a configuração mudar com a página aberta.
 
+## Ordem de carregamento
+1. HTML pré-renderizado, CSS e a foto do Sobre: o texto aparece sem esperar JavaScript.
+2. React (78 KB com gzip) hidrata a página.
+3. three.js e as cenas (170 KB com gzip) quando o navegador fica livre, no máximo 1,5 s depois.
+4. Tênis (470 KB) na primeira vez que o visitante revela os objetos ou quando o navegador fica livre de novo, no máximo 4 s depois.
+5. Painel de testes (2 KB) só com `#dev`.
+
 ## Peso dos recursos
 | Recurso | Peso |
 |---|---|

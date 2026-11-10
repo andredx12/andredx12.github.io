@@ -4,7 +4,7 @@ import "./perf-panel.css";
 
 type Stats = ReturnType<ThreeModule["devTools"]["stats"]>;
 
-/** Painel de testes de desempenho. Só aparece com #dev no endereço. */
+/** Painel de testes de desempenho. Carregado pelo DevPanel só com #dev no endereço. */
 export function PerfPanel() {
   const [tools, setTools] = useState<ThreeModule["devTools"] | null>(null);
   const [open, setOpen] = useState(false);
@@ -12,7 +12,6 @@ export function PerfPanel() {
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    if (location.hash !== "#dev") return;
     loadThree()
       .then((three) => {
         setTools(three.devTools);

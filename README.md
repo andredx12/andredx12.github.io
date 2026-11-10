@@ -22,7 +22,9 @@ O `build` gera a pasta `dist/` e já escreve o HTML de todas as seções dentro 
 
 ## Publicar
 
-Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`, que gera o `dist/` e publica em https://andredx12.github.io.
+Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`. Ele confere lint (`npm run lint`), formatação (`npm run format:check`) e tipos, gera o `dist/` e publica em https://andredx12.github.io. Se alguma checagem falhar, o site continua na versão anterior.
+
+O `index.html` tem uma Content-Security-Policy que só libera o que vem do próprio site. Se mudar o script inline do `<head>`, o build mostra o hash novo pra colocar no `script-src`.
 
 ## Onde mexer no conteúdo
 

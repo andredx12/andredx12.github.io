@@ -1,5 +1,5 @@
 import { Header } from "./components/Header";
-import { PerfPanel } from "./components/PerfPanel";
+import { DevPanel } from "./components/DevPanel";
 import { Contato } from "./sections/Contato";
 import { Experiencia } from "./sections/experiencia/Experiencia";
 import { Footer } from "./sections/Footer";
@@ -25,7 +25,7 @@ export default function App() {
         <Contato />
       </main>
       <Footer />
-      <PerfPanel />
+      <DevPanel />
     </>
   );
 }

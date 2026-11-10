@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      Política de conteúdo: só carrega o que vem do próprio site. O hash libera o script inline que marca a classe "js";
+      se esse script mudar, o hash precisa ser recalculado (o build avisa).
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
     <title>André Quintino | Engenharia de Software, back-end</title>
     <meta
       name="description"
