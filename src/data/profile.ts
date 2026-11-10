@@ -3,6 +3,8 @@ export const profile = {
   role: "Estudante de Engenharia de Software, focado em back-end.",
   intro:
     "Construo APIs e sistemas com Java, Spring Boot e PostgreSQL. Trabalho numa fábrica de coletes balísticos desde 2021, e foi de lá que saiu meu principal projeto.",
+  availability:
+    "Procuro estágio em back-end, de manhã ou à tarde. Presencial ou híbrido em Mogi das Cruzes, Suzano e São Paulo. Em outras cidades, remoto.",
   facts: [
     { label: "Formação", value: "Engenharia de Software na UMC, 7º semestre" },
     { label: "Formatura", value: "Julho de 2027" },

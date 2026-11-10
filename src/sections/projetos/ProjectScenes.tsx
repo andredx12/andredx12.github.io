@@ -1,19 +1,31 @@
-/* Palcos dos projetos de IoT: a cena simula os sensores e o React mostra as leituras */
+/* Uma cena por projeto. As de IoT mostram por cima as leituras que a cena simula. */
 import { useRef, useState } from "react";
 import type { Crop, GreenhouseReadings, createEstufasScene } from "../../three/scenes/projects/estufas";
 import type { AlertLevel } from "../../three/scenes/projects/tempGuard";
 import { ProjectStage } from "./ProjectStage";
 
+export interface SceneProps {
+  description: string;
+}
+
 const LEVEL_COLORS = ["#22c55e", "#facc15", "#ef4444"] as const;
 const formatTemp = (value: number) => `${value.toFixed(1).replace(".", ",")} °C`;
 const formatLux = (value: number) => value.toLocaleString("pt-BR");
 
-export function TempGuardStage() {
+export function BlintecScene({ description }: SceneProps) {
+  return <ProjectStage description={description} create={(three, viewport) => three.createBlintecScene(viewport)} />;
+}
+
+export function CampusScene({ description }: SceneProps) {
+  return <ProjectStage description={description} create={(three, viewport) => three.createCampusScene(viewport)} />;
+}
+
+export function TempGuardScene({ description }: SceneProps) {
   const [reading, setReading] = useState<{ temp: number; level: AlertLevel }>({ temp: 24, level: 0 });
 
   return (
     <ProjectStage
-      description="Animação: placa ESP32 lê o sensor DHT22 e acende LEDs verde, amarelo e vermelho conforme a temperatura sobe."
+      description={description}
       create={(three, viewport) => three.createTempGuardScene(viewport, { onReading: (temp, level) => setReading({ temp, level }) })}
     >
       <span className="chip">
@@ -27,7 +39,7 @@ export function TempGuardStage() {
 const RELAY_NAMES = ["Irrigação", "Ventilação", "Iluminação"] as const;
 const INITIAL_READINGS: GreenhouseReadings = { temperature: 22, soil: 68, lux: 9000, relays: [false, false, false] };
 
-export function EstufasStage() {
+export function EstufasScene({ description }: SceneProps) {
   const [readings, setReadings] = useState(INITIAL_READINGS);
   const [crop, setCrop] = useState<Crop>("alface");
   const cropRef = useRef(crop);
@@ -42,7 +54,7 @@ export function EstufasStage() {
 
   return (
     <ProjectStage
-      description="Animação: numa estufa, o ESP32 lê os sensores e liga a irrigação quando o solo seca, o exaustor quando esquenta e a lâmpada quando escurece. O botão troca a cultura entre alface e repolho."
+      description={description}
       showReplay={false}
       sceneRef={sceneRef}
       create={(three, viewport) => {

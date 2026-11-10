@@ -26,7 +26,9 @@ Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`, que
 
 ## Onde mexer no conteúdo
 
-- `src/data/profile.ts`: nome, apresentação, links e dados da formação.
+- `src/data/profile.ts`: nome, apresentação, links, disponibilidade e dados da formação.
+- `src/data/experience.ts`: trajetória na Blintec (cargos, atividades e destaque).
+- `src/data/projects.ts`: projetos, na ordem da página. Um projeto novo com cena existente é só mais um item aqui.
 - `src/data/stack.ts`: grupos da stack.
 - `src/sections/`: uma seção por arquivo; Experiência e Projetos têm pasta própria porque se dividem em partes.
 - `src/data/vestSequence.ts`: fases, legendas e etiquetas da animação do colete.

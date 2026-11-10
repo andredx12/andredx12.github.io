@@ -3,6 +3,7 @@ import { profile } from "../data/profile";
 import { useThreeScene } from "../hooks/useThreeScene";
 
 const isTouchOnly = () => matchMedia("(hover: none)").matches;
+const [firstName, lastName] = profile.name.split(" ");
 
 export function Sobre() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -57,9 +58,9 @@ export function Sobre() {
       <div className="wrap">
         <div>
           <h1 id="sobre-titulo">
-            André
+            {firstName}
             <br />
-            Quintino
+            {lastName}
           </h1>
           <p className="role">{profile.role}</p>
           <p className="intro">{profile.intro}</p>
@@ -83,7 +84,7 @@ export function Sobre() {
             tabIndex={0}
             role="button"
             aria-pressed={revealed}
-            aria-label="Foto de André Quintino. Ative pra mostrar ou esconder o tênis, o livro e o halter."
+            aria-label={`Foto de ${profile.name}. Ative pra mostrar ou esconder o tênis, o livro e o halter.`}
             onPointerDown={(e) => (pointerType.current = e.pointerType)}
             onPointerEnter={(e) => e.pointerType === "mouse" && setRevealed(true)}
             onPointerLeave={(e) => {

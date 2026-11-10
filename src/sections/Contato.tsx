@@ -18,8 +18,7 @@ export function Contato() {
               Vamos conversar?
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
-              Procuro estágio em back-end, de manhã ou à tarde. Presencial ou híbrido em Mogi das Cruzes, Suzano e São
-              Paulo. Em outras cidades, remoto.
+              {profile.availability}
             </p>
             <a
               href={`mailto:${profile.links.email}`}
