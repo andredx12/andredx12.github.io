@@ -51,8 +51,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 @keyframes ping{70%{box-shadow:0 0 0 8px rgba(107,149,255,0)}100%{box-shadow:0 0 0 0 rgba(107,149,255,0)}}
 @media (prefers-reduced-motion:reduce){.hint i{animation:none}}
 .only-touch{display:none}
-.touch .only-touch{display:inline}
-.touch .only-mouse{display:none}
+@media (hover:none){.only-touch{display:inline}.only-mouse{display:none}}
 
 /* seções */
 .section{border-top:1px solid rgba(36,48,79,.6)}

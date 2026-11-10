@@ -28,8 +28,13 @@ Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`, que
 
 - `src/data/profile.ts`: nome, apresentação, links e dados da formação.
 - `src/data/stack.ts`: grupos da stack.
-- `src/sections/`: uma seção por arquivo (Sobre, Experiência, Projetos, Stack, Contato, rodapé).
-- `src/three/scenes.js`: as cenas 3D (Sobre, sequência do colete e projetos), todas num canvas WebGL só.
+- `src/sections/`: uma seção por arquivo; Experiência e Projetos têm pasta própria porque se dividem em partes.
+- `src/data/vestSequence.ts`: fases, legendas e etiquetas da animação do colete.
+- `src/hooks/useThreeScene.ts`: carrega o 3D sob demanda e monta ou desmonta a cena de cada componente.
+- `src/three/`: as cenas 3D, todas num canvas WebGL só.
+  - `engine/`: renderizador, laço que pausa fora da tela, qualidade adaptativa e movimento reduzido.
+  - `lib/`: interpolação, texturas desenhadas em canvas, formas e luz de estúdio.
+  - `scenes/`: Sobre, colete e uma cena por projeto.
 - `src/styles/scenes.css`: estilos das seções com 3D.
 - `public/models/tenis.glb` e `public/img/`: modelo do tênis e foto recortada.
 - `docs/plano-tecnico.md`: pesos, níveis de qualidade e como testar o desempenho (`#dev` no endereço).
