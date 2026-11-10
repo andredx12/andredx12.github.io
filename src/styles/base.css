@@ -1,0 +1,102 @@
+/* Peças compartilhadas pelas seções: canvas do 3D, contêiner, botões, títulos de seção e etiquetas */
+@layer components {
+  .section-head h2 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  #gl {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .wrap {
+    max-width: 1152px;
+    margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 640px) {
+    .wrap {
+      padding-left: max(24px, env(safe-area-inset-left, 0px));
+      padding-right: max(24px, env(safe-area-inset-right, 0px));
+    }
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .btn-primary {
+    background: var(--color-electric-strong);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-electric-deep);
+  }
+  .btn-ghost {
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(107, 149, 255, 0.6);
+    background: var(--color-surface-2);
+  }
+  .section {
+    border-top: 1px solid rgba(36, 48, 79, 0.6);
+  }
+  .section-head {
+    padding-block: 72px 32px;
+    display: grid;
+    gap: 14px;
+  }
+  .section-head h2 {
+    font-size: clamp(2.25rem, 5vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .section-head p {
+    max-width: 40rem;
+    color: var(--color-muted);
+    font-size: 17px;
+  }
+  .chips {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+  }
+  .chips li {
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 13px;
+  }
+  .no-webgl .stage-gl,
+  .no-webgl .seq-gl,
+  .no-webgl .proj-gl {
+    display: none;
+  }
+  .gl-msg {
+    display: none;
+  }
+  .no-webgl .gl-msg {
+    display: block;
+    padding: 14px;
+    color: var(--color-muted);
+    font-size: 14px;
+  }
+}

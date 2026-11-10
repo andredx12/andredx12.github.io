@@ -1,0 +1,189 @@
+/* Projetos: blocos alternados com a cena e as leituras por cima */
+@layer components {
+  .proj h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  .projects {
+    display: grid;
+    gap: 72px;
+    padding-bottom: 12px;
+  }
+  @media (min-width: 1024px) {
+    .projects {
+      gap: 96px;
+    }
+  }
+  .proj {
+    display: grid;
+    gap: 26px;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .proj {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 56px;
+    }
+    .proj.flip .proj-stage {
+      order: 2;
+    }
+  }
+  .proj-stage {
+    position: relative;
+    aspect-ratio: 4/3;
+    max-width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: 24px;
+    background: radial-gradient(70% 60% at 50% 0%, rgba(47, 107, 255, 0.16), transparent 70%), var(--color-surface);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .proj-gl {
+    position: absolute;
+    inset: 0;
+  }
+  .replay {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 5;
+    font: inherit;
+    font-size: 13px;
+    color: var(--color-ink);
+    background: rgba(5, 7, 13, 0.7);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  .replay:hover {
+    border-color: rgba(107, 149, 255, 0.7);
+  }
+  .chip {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    z-index: 5;
+    font-size: 13px;
+    border-radius: 999px;
+    padding: 5px 11px;
+    background: rgba(5, 7, 13, 0.7);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 7px;
+    background: var(--color-success);
+    vertical-align: 0;
+  }
+  .gh-read {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: calc(100% - 24px);
+    pointer-events: none;
+  }
+  .chip-s {
+    font-size: 12.5px;
+    border-radius: 999px;
+    padding: 4px 10px;
+    background: rgba(5, 7, 13, 0.72);
+    border: 1px solid var(--color-line);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .chip-s b {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .gh-relays {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 12.5px;
+    color: var(--color-muted);
+    pointer-events: none;
+  }
+  .gh-relays span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .gh-relays i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-line);
+    transition:
+      background 0.25s,
+      box-shadow 0.25s;
+  }
+  .gh-relays .on {
+    color: var(--color-ink);
+  }
+  .gh-relays .on i {
+    background: var(--color-electric);
+    box-shadow: 0 0 8px var(--color-electric);
+  }
+  .crop {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 5;
+    font: inherit;
+    font-size: 13px;
+    color: var(--color-ink);
+    background: rgba(5, 7, 13, 0.7);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  .crop:hover {
+    border-color: rgba(107, 149, 255, 0.7);
+  }
+  .crop b {
+    font-weight: 600;
+    color: var(--color-glow);
+  }
+  .kind {
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-glow);
+    border: 1px solid rgba(107, 149, 255, 0.4);
+    border-radius: 999px;
+    padding: 3px 12px;
+  }
+  .proj h3 {
+    margin-top: 14px;
+    font-size: clamp(1.7rem, 3vw, 2.1rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .proj .pnote {
+    margin-top: 6px;
+    color: var(--color-muted);
+    font-size: 15px;
+  }
+  .proj .psum {
+    margin-top: 14px;
+    color: rgba(238, 242, 255, 0.9);
+    font-size: 17px;
+    max-width: 36rem;
+  }
+}

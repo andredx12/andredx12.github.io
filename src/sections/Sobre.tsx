@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { profile } from "../data/profile";
 import { useThreeScene } from "../hooks/useThreeScene";
+import "./sobre.css";
 
 const isTouchOnly = () => matchMedia("(hover: none)").matches;
 const [firstName, lastName] = profile.name.split(" ");
@@ -64,6 +65,14 @@ export function Sobre() {
           </h1>
           <p className="role">{profile.role}</p>
           <p className="intro">{profile.intro}</p>
+          <dl className="facts">
+            {profile.facts.map((fact) => (
+              <div key={fact.label}>
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
           <div className="actions">
             <a className="btn btn-primary" href="#projetos">
               Ver projetos

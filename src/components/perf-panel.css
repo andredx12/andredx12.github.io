@@ -1,0 +1,62 @@
+/* Painel de testes (#dev) */
+@layer components {
+  .perfbox {
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .perf-btn,
+  .perf-actions button {
+    font: inherit;
+    font-size: 13px;
+    color: var(--color-ink);
+    background: rgba(11, 16, 32, 0.92);
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+  }
+  .perf-btn[aria-expanded="true"],
+  .perf-actions button[aria-pressed="true"] {
+    border-color: var(--color-glow);
+  }
+  .perf-panel {
+    width: min(300px, calc(100vw - 24px));
+    background: rgba(11, 16, 32, 0.96);
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 13px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .perf-panel dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .perf-panel dt {
+    color: var(--color-muted);
+  }
+  .perf-panel dd {
+    margin: 0;
+    text-align: right;
+    color: var(--color-ink);
+  }
+  .perf-actions {
+    display: grid;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .perf-actions button {
+    border-radius: 10px;
+    text-align: left;
+  }
+}

@@ -37,7 +37,7 @@ Cada envio pra branch `main` roda o workflow `.github/workflows/deploy.yml`, que
   - `engine/`: renderizador, laço que pausa fora da tela, qualidade adaptativa e movimento reduzido.
   - `lib/`: interpolação, texturas desenhadas em canvas, formas e luz de estúdio.
   - `scenes/`: Sobre, colete e uma cena por projeto.
-- `src/styles/scenes.css`: estilos das seções com 3D.
+- Estilos: as cores e fontes ficam só no `@theme` de `src/index.css`. `src/styles/base.css` tem as peças comuns, e cada seção com 3D tem seu CSS do lado do componente (`sobre.css`, `experiencia.css`, `projetos.css`). `npm run format` formata os CSS.
 - `public/models/tenis.glb` e `public/img/`: modelo do tênis e foto recortada.
 - `docs/plano-tecnico.md`: pesos, níveis de qualidade e como testar o desempenho (`#dev` no endereço).
 

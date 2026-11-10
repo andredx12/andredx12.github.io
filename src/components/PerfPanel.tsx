@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { loadThree, type ThreeModule } from "../hooks/useThreeScene";
+import "./perf-panel.css";
 
 type Stats = ReturnType<ThreeModule["devTools"]["stats"]>;
 
