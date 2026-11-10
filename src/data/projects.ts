@@ -3,6 +3,11 @@
 /** Cena 3D que acompanha o projeto. */
 export type ProjectScene = "blintec" | "campus" | "tempguard" | "estufas";
 
+export interface RepoLink {
+  label: string;
+  url: string;
+}
+
 export interface Project {
   /** Usado no id do bloco, pra links como #projeto-blintec. */
   id: string;
@@ -15,6 +20,8 @@ export interface Project {
   tech: string[];
   /** O que a animação mostra, pra quem usa leitor de tela. */
   sceneDescription: string;
+  /** Repositórios públicos do projeto. */
+  repos: RepoLink[];
 }
 
 export const projects: Project[] = [
@@ -28,6 +35,10 @@ export const projects: Project[] = [
       "Planejamento e controle de produção para uma fábrica de coletes balísticos: pedidos, estoque de rolos de tecido, enfesto, produção e um painel com os números do dia a dia.",
     tech: ["Java 21", "Spring Boot", "PostgreSQL", "Flyway", "JWT", "React"],
     sceneDescription: "Animação: rolos de tecido estendem camadas sobre a mesa e formam um enfesto; os moldes de colete são marcados e cortados.",
+    repos: [
+      { label: "Back-end no GitHub", url: "https://github.com/andredx12/blintec" },
+      { label: "Front-end no GitHub", url: "https://github.com/andredx12/blintec-frontend" },
+    ],
   },
   {
     id: "emprestacampus",
@@ -39,6 +50,7 @@ export const projects: Project[] = [
       "Sistema web para emprestar equipamentos da faculdade, com foco em segurança e LGPD. Minha parte foi o back-end em Django e DRF: papéis de usuário, TLS, criptografia em repouso, logs e 2FA.",
     tech: ["Python", "Django", "DRF", "PostgreSQL", "pytest"],
     sceneDescription: "Animação: notebook abre, pede o código de verificação e o cadeado destrava.",
+    repos: [{ label: "Código no GitHub", url: "https://github.com/carlosvbr/EmprestaCampus" }],
   },
   {
     id: "tempguard",
@@ -50,6 +62,7 @@ export const projects: Project[] = [
       "Monitor de temperatura e umidade com alertas visuais e sonoros. Um ESP32 lê o sensor DHT22 e aciona LEDs verde, amarelo e vermelho e um buzzer quando os valores saem da faixa.",
     tech: ["ESP32", "MicroPython", "DHT22", "Wokwi"],
     sceneDescription: "Animação: placa ESP32 lê o sensor DHT22 e acende LEDs verde, amarelo e vermelho conforme a temperatura sobe.",
+    repos: [{ label: "Código no GitHub", url: "https://github.com/andredx12/TempGuard" }],
   },
   {
     id: "estufas",
@@ -62,6 +75,7 @@ export const projects: Project[] = [
     tech: ["ESP32", "MicroPython", "DHT22", "Relés", "Wokwi"],
     sceneDescription:
       "Animação: numa estufa, o ESP32 lê os sensores e liga a irrigação quando o solo seca, o exaustor quando esquenta e a lâmpada quando escurece. O botão troca a cultura entre alface e repolho.",
+    repos: [{ label: "Código no GitHub", url: "https://github.com/andredx12/estufas-iot-esp32" }],
   },
 ];
 
