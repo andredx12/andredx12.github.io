@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { navLinks, profile } from "../data/profile";
-import { PlyMark } from "./PlyMark";
+import { LogoMark } from "./LogoMark";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ export function Header() {
           href="#sobre"
           className="flex items-center gap-2.5 font-display text-[17px] font-semibold tracking-[-0.01em] text-ink"
         >
-          <PlyMark className="h-6 w-6" />
+          <LogoMark className="h-7 w-7" />
           {profile.name}
         </a>
 

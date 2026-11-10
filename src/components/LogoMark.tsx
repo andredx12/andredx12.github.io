@@ -1,0 +1,13 @@
+/** Logo com as iniciais AQ. As letras são contornos da Space Grotesk, pra não depender da fonte carregada. */
+export function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" className={className}>
+      <rect width="32" height="32" rx="8" fill="#2f6bff" />
+      <path
+        transform="translate(6.72 20.00)"
+        fill="#fff"
+        d="M0.27 0 3.03 -10.5H6.48L9.24 0H7.2L6.63 -2.31H2.88L2.31 0ZM3.34 -4.14H6.17L4.89 -9.25H4.62Z M13.98 0.21Q12 0.21 10.83 -0.88Q9.66 -1.96 9.66 -3.99V-6.51Q9.66 -8.54 10.83 -9.62Q12 -10.71 13.98 -10.71Q15.96 -10.71 17.13 -9.62Q18.3 -8.54 18.3 -6.51V-3.99Q18.3 -1.96 17.13 -0.88Q15.96 0.21 13.98 0.21ZM13.98 -1.56Q15.09 -1.56 15.71 -2.21Q16.32 -2.85 16.32 -3.93V-6.57Q16.32 -7.65 15.71 -8.29Q15.09 -8.94 13.98 -8.94Q12.88 -8.94 12.26 -8.29Q11.64 -7.65 11.64 -6.57V-3.93Q11.64 -2.85 12.26 -2.21Q12.88 -1.56 13.98 -1.56ZM14.67 2.7Q13.93 2.7 13.48 2.24Q13.02 1.78 13.02 1.02V0H14.94V0.72Q14.94 1.17 15.36 1.17H16.25V2.7Z"
+      />
+    </svg>
+  );
+}
